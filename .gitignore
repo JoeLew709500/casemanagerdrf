@@ -1,2 +1,13 @@
 env.py
+__pycache__/
+*.py[cod]
+node_modules/
+core.Microsoft*
+core.mongo*
+core.python*
+
+# Ignore migrations
+**/migrations/**
+!**/migrations/__init__.py
+!**/migrations/*
 db.sqlite3
