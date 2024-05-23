@@ -40,7 +40,7 @@ class Action(models.Model):
 
 
 class ActionPhoto(models.Model):
-        """
+    """
     Model to store photos of actions
     """
     photo = CloudinaryField('image')
