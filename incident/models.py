@@ -15,7 +15,8 @@ INCIDENT_CATEGORY_CHOICES = (
     (9, 'Accumulation of Waste'),
     (10, 'Trade Waste Checking'),
     (11, 'ASB (Anti-Social Behaviour)'),
-    )
+)
+
 
 class Incident(models.Model):
     """

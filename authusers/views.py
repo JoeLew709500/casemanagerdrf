@@ -12,6 +12,7 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     queryset = User.objects.all()
 
+
 class UserListView(generics.ListAPIView):
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
