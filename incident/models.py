@@ -1,29 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+
 # Create your models here.
-
-INCIDENT_CATEGORY_CHOICES = (
-    (1, 'Fly Tipping'),
-    (2, 'Noise Pollution'),
-    (3, 'Abandoned Vehicle'),
-    (4, 'Littering'),
-    (5, 'Statutory Nuisance (e.g. odour, light, etc.)'),
-    (6, 'Presentation of Waste (Domestic)'),
-    (7, 'Presentation of Waste (Commercial)'),
-    (8, 'Atmospheric Pollution (e.g. smoke, fumes, etc.)'),
-    (9, 'Accumulation of Waste'),
-    (10, 'Trade Waste Checking'),
-    (11, 'ASB (Anti-Social Behaviour)'),
-)
-
-
 class Incident(models.Model):
     """
     Model to record incidents
     """
     location = models.CharField(max_length=200)
-    incident_category = models.IntegerField(choices=INCIDENT_CATEGORY_CHOICES)
+    incident_category = models.CharField(max_length=200)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    related_name='incidents')
