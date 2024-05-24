@@ -54,5 +54,13 @@ class IncidentDetailView(generics.RetrieveUpdateDestroyAPIView):
         else:
             return print(serializer.errors)
 
-    def perform_destroy(self, instance):
-        instance.delete()
+class IncidentDeleteView(generics.DestroyAPIView):
+    """
+    View to delete an incident
+    """
+
+    serializer_class = IncidentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Incident.objects.filter(created_by=self.request.user)
