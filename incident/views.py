@@ -37,3 +37,17 @@ class IncidentDeleteView(generics.DestroyAPIView):
     
     def perform_destroy(self, instance):
         instance.delete()
+
+class IncidentCreateView(generics.CreateAPIView):
+    """
+    View to create an incident
+    """
+
+    serializer_class = IncidentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(created_by=self.request.user)
+        else:
+            return print(serializer.errors)

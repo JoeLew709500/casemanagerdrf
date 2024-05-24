@@ -6,4 +6,5 @@ urlpatterns = [
     path("", views.IncidentListView.as_view(), name="incident_list"),
     path("<int:pk>/", views.IncidentDeleteView.as_view(),
          name="incident_delete"),
+    path("create/", views.IncidentCreateView.as_view()),
 ]
