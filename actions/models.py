@@ -26,7 +26,7 @@ class Action(models.Model):
         ordering = ['-created_on']
 
     def __str__(self):
-        return f"{self.get_action_code_display()} - {self.incident}"
+        return f"{self.action_code} - {self.incident}"
 
 
 class ActionPhoto(models.Model):

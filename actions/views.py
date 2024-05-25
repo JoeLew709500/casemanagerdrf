@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -37,7 +38,7 @@ class ActionListView(generics.ListCreateAPIView):
 
 class ActionDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
-    View to retrieve, update and delete an action
+    View to retrieve, update
     """
 
     serializer_class = ActionSerializer
@@ -47,10 +48,18 @@ class ActionDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Action.objects.filter(created_by=self.request.user)
     
     def perform_update(self, serializer):
+        print('Serializer data:', serializer.data)
         if serializer.is_valid():
             serializer.save()
         else:
-            return print(serializer.errors)
+            print('Serializer errors:', serializer.errors)
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        try:
+            return queryset.get(pk=self.kwargs.get('pk'))
+        except ObjectDoesNotExist:
+            raise Http404
 
 class ActionDeleteView(generics.DestroyAPIView):
     """

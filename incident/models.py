@@ -23,4 +23,4 @@ class Incident(models.Model):
         ordering = ['-created_on']
 
     def __str__(self):
-        return f"{self.get_incident_category_display()} - {self.location}"
+        return f"{self.incident_category} - {self.location}"
