@@ -30,4 +30,5 @@ urlpatterns = [
          TokenRefreshView.as_view(), name="token_refresh"),
     path("authusers-api/", include("rest_framework.urls")),
     path("incident/", include("incident.urls")),
+    path("actions/", include("actions.urls")),
 ]

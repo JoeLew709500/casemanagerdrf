@@ -3,15 +3,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from incident.models import Incident
 
-ACTION_CODES = (
-    (1, 'Visit to site'),
-    (2, 'Notice Issued'),
-    (3, 'General File Note'),
-    (4, 'Referral'),
-    (5, 'Out going communication (e.g. letter, email, etc.)'),
-    (6, 'Enforcement action taken'),
-)
-
 # Create your models here.
 
 
@@ -24,9 +15,8 @@ class Action(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                    related_name='actions')
-    action_code = models.IntegerField(choices=ACTION_CODES)
+    action_code = models.TextField()
     details = models.TextField()
-    completed = models.BooleanField(default=False)
     completed_on = models.DateTimeField(null=True, blank=True)
 
     class Meta:

@@ -1,10 +1,28 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from .models import Action, ActionPhoto
 from .serializers import ActionPhotoSerializer, ActionSerializer
 
+
 # Create your views here.
+class ActionCreateView(generics.CreateAPIView):
+    """
+    View to create an action
+    """
+
+    serializer_class = ActionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(created_by=self.request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ActionListView(generics.ListCreateAPIView):
     """
@@ -15,14 +33,25 @@ class ActionListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Action.objects.filter(created_by=self.request.user)
+        return Action.objects.filter(created_by=self.request.user, incident_id=self.kwargs['pk'])
 
-    def perform_create(self, serializer):
+class ActionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    View to retrieve, update and delete an action
+    """
+
+    serializer_class = ActionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Action.objects.filter(created_by=self.request.user)
+    
+    def perform_update(self, serializer):
         if serializer.is_valid():
-            serializer.save(created_by=self.request.user)
+            serializer.save()
         else:
             return print(serializer.errors)
-        
+
 class ActionDeleteView(generics.DestroyAPIView):
     """
     View to delete an action
