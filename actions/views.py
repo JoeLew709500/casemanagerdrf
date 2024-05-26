@@ -1,7 +1,10 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from rest_framework import generics, status
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Action, ActionPhoto
 from .serializers import ActionPhotoSerializer, ActionSerializer
@@ -25,6 +28,7 @@ class ActionCreateView(generics.CreateAPIView):
             print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ActionListView(generics.ListCreateAPIView):
     """
     View to list and create actions
@@ -36,6 +40,7 @@ class ActionListView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Action.objects.filter(created_by=self.request.user, incident_id=self.kwargs['pk'])
 
+
 class ActionDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     View to retrieve, update
@@ -46,9 +51,10 @@ class ActionDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Action.objects.filter(created_by=self.request.user)
-    
+
+
     def perform_update(self, serializer):
-        print('Serializer data:', serializer.data)
+        print('Validated data:', serializer.validated_data)
         if serializer.is_valid():
             serializer.save()
         else:
@@ -61,6 +67,7 @@ class ActionDetailView(generics.RetrieveUpdateDestroyAPIView):
         except ObjectDoesNotExist:
             raise Http404
 
+
 class ActionDeleteView(generics.DestroyAPIView):
     """
     View to delete an action
@@ -71,9 +78,20 @@ class ActionDeleteView(generics.DestroyAPIView):
 
     def get_queryset(self):
         return Action.objects.filter(created_by=self.request.user)
-    
+
     def perform_destroy(self, instance):
         instance.delete()
+
+class ActionPhotoCreateView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, format=None):
+        serializer = ActionPhotoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ActionPhotoListView(generics.ListCreateAPIView):
     """
@@ -84,6 +102,7 @@ class ActionPhotoListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        print(ActionPhoto.objects.filter(action_id__created_by=self.request.user))
         return ActionPhoto.objects.filter(action_id__created_by=self.request.user)
 
     def perform_create(self, serializer):
@@ -91,7 +110,8 @@ class ActionPhotoListView(generics.ListCreateAPIView):
             serializer.save()
         else:
             return print(serializer.errors)
-        
+
+
 class ActionPhotoDeleteView(generics.DestroyAPIView):
     """
     View to delete an action photo
@@ -102,6 +122,6 @@ class ActionPhotoDeleteView(generics.DestroyAPIView):
 
     def get_queryset(self):
         return ActionPhoto.objects.filter(action_id__created_by=self.request.user)
-    
+
     def perform_destroy(self, instance):
         instance.delete()

@@ -8,4 +8,7 @@ urlpatterns = [
          name="action_delete"),
     path("create/", views.ActionCreateView.as_view()),
     path("delete/<int:pk>/", views.ActionDeleteView.as_view()),
+    path("photo/", views.ActionPhotoListView.as_view(), name="action_photo_create"),
+    path("photo/delete/<int:pk>/", views.ActionPhotoDeleteView.as_view(), name="action_photo_delete"),
+    path("photo/create/", views.ActionPhotoCreateView.as_view(), name="action_photo_create"),
 ]
