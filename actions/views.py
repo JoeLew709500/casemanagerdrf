@@ -102,8 +102,7 @@ class ActionPhotoListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        print(ActionPhoto.objects.filter(action_id__created_by=self.request.user))
-        return ActionPhoto.objects.filter(action_id__created_by=self.request.user)
+        return ActionPhoto.objects.filter(action_id__created_by=self.request.user, action_id=self.kwargs['pk'])
 
     def perform_create(self, serializer):
         if serializer.is_valid():
