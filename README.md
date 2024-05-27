@@ -89,3 +89,5 @@ Search repository by name
 6. Deployment
     Go back to the deploy tab scroll down and click deploy
 
+## Credits
+I would like to give credit to [techwithtim](https://github.com/techwithtim/Django-React-Full-Stack-App) for his repo on how he manages JWP token authentication with between Django and React
