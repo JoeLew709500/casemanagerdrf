@@ -34,5 +34,6 @@ class ActionPhoto(models.Model):
     Model to store photos of actions
     """
     photo = CloudinaryField('image')
-    action_id = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='photos')
+    action_id = models.ForeignKey(Action, on_delete=models.CASCADE,
+                                  related_name='photos')
 

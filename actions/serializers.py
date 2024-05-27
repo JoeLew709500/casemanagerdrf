@@ -18,7 +18,8 @@ class ActionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Action
-        fields = ['id', 'incident', 'created_on', 'created_by', 'action_code',
+        fields = ['id', 'incident', 'created_on',
+                  'created_by', 'action_code',
                   'details', 'completed_on']
         extra_kwargs = {
             'created_by': {'read_only': True},

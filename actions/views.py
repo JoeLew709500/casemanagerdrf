@@ -23,10 +23,12 @@ class ActionCreateView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save(created_by=self.request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED)
         else:
             print(serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class ActionListView(generics.ListCreateAPIView):
@@ -38,7 +40,8 @@ class ActionListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Action.objects.filter(created_by=self.request.user, incident_id=self.kwargs['pk'])
+        return Action.objects.filter(created_by=self.request.user,
+                                     incident_id=self.kwargs['pk'])
 
 
 class ActionDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -89,9 +92,11 @@ class ActionPhotoCreateView(APIView):
         serializer = ActionPhotoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
 class ActionPhotoListView(generics.ListCreateAPIView):
     """
@@ -102,7 +107,8 @@ class ActionPhotoListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return ActionPhoto.objects.filter(action_id__created_by=self.request.user, action_id=self.kwargs['pk'])
+        return ActionPhoto.objects.filter(action_id__created_by=self.request.user,
+                                          action_id=self.kwargs['pk'])
 
     def perform_create(self, serializer):
         if serializer.is_valid():
